@@ -28,6 +28,7 @@ check: build/blue-yeti-reset
 	sh -n scripts/blue-yeti-autoreset tests/check-autoreset.sh
 	sh ./tests/check-autoreset.sh
 	systemd-analyze verify systemd/blue-yeti-autoreset.service
+	systemd-analyze verify systemd/blue-yeti-autoreset-resume.service
 
 install: build/blue-yeti-reset
 	$(INSTALL) -D -m 0755 build/blue-yeti-reset \
@@ -36,6 +37,8 @@ install: build/blue-yeti-reset
 		"$(DESTDIR)$(libexecdir)/blue-yeti-autoreset"
 	$(INSTALL) -D -m 0644 systemd/blue-yeti-autoreset.service \
 		"$(DESTDIR)$(systemdunitdir)/blue-yeti-autoreset.service"
+	$(INSTALL) -D -m 0644 systemd/blue-yeti-autoreset-resume.service \
+		"$(DESTDIR)$(systemdunitdir)/blue-yeti-autoreset-resume.service"
 	$(INSTALL) -D -m 0644 README.md "$(DESTDIR)$(docdir)/README.md"
 	$(INSTALL) -D -m 0644 LICENSE "$(DESTDIR)$(licensedir)/LICENSE"
 
