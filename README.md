@@ -37,23 +37,25 @@ hardware and firmware. Blue reused the Yeti name across revisions, so the year
 or enclosure alone is not a compatibility check; the USB ID and firmware value
 above are authoritative.
 
-## Install on Arch Linux
+## Install
 
-Install the `blue-yeti-autoreset` package from the AUR with an AUR helper:
-
-```sh
-yay -S blue-yeti-autoreset
-```
-
-For development installs from this checkout:
+This project is not packaged on the AUR or any other distribution repository.
+Install it from source:
 
 ```sh
+git clone https://github.com/keasbeexd/blue-yeti-autoreset.git
+cd blue-yeti-autoreset
 make check
 sudo make install
 sudo systemctl daemon-reload
 sudo systemctl enable --now blue-yeti-autoreset.service
 sudo systemctl enable blue-yeti-autoreset-resume.service
 ```
+
+`make install` respects `DESTDIR` for staged/packaged builds (e.g.
+`make DESTDIR=/tmp/pkgroot install`). Build-time dependencies (make, libusb,
+pkgconf, a C17 compiler, systemd, and POSIX `sh`) are listed again under
+[Build and test](#build-and-test).
 
 The installation provides two systemd services that must each be enabled once:
 
@@ -73,6 +75,21 @@ resetting an already connected microphone immediately:
 ```sh
 sudo systemctl enable blue-yeti-autoreset.service blue-yeti-autoreset-resume.service
 ```
+
+## Uninstall
+
+Disable and stop both services, then remove the installed files from this
+checkout:
+
+```sh
+sudo systemctl disable --now blue-yeti-autoreset.service blue-yeti-autoreset-resume.service
+sudo make uninstall
+sudo systemctl daemon-reload
+```
+
+`make uninstall` removes `blue-yeti-reset`, the `blue-yeti-autoreset` wrapper,
+both systemd unit files, and the installed README/LICENSE copies, using the
+same `DESTDIR` (if any) that was passed to `make install`.
 
 ## How it works
 
